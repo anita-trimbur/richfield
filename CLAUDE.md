@@ -1,0 +1,67 @@
+# CLAUDE.md
+
+Portfolio website built with Next.js (App Router, TypeScript) and Tailwind CSS v4, deployed as a fully static export (`output: "export"` → `out/`). This site will be edited constantly, so optimize every change for the next person who has to change it.
+
+## Stack constraints
+
+- Static export only: no API routes, middleware, server actions, or request-time rendering. Pages with dynamic routes need `generateStaticParams`.
+- Images use `images.unoptimized` (no image server); size and compress assets before adding them.
+- Source lives in `src/`; import with the `@/*` alias.
+
+## Commands
+
+```bash
+npm run dev        # dev server at http://localhost:3000
+npm run build      # static export to ./out
+npm run typecheck  # tsc --noEmit
+npm run lint       # ESLint (Next.js core-web-vitals + TypeScript + full jsx-a11y recommended)
+npm run lint:fix   # ESLint with autofix
+npm run format     # Prettier write (also sorts Tailwind classes)
+npm run check      # format:check + lint + typecheck — run before every commit
+```
+
+- ESLint config: `eslint.config.mjs` (flat config). `eslint-config-prettier` goes last so ESLint never fights Prettier.
+- Prettier config: `.prettierrc.json`, with `prettier-plugin-tailwindcss` pointed at `src/app/globals.css` so custom theme tokens sort correctly.
+- Version pins: ESLint stays on v9 and TypeScript below 6.1 until `eslint-config-next`'s plugins (`eslint-plugin-react`, `jsx-a11y`, `import`, `typescript-eslint`) support newer majors. Check their peer ranges before upgrading.
+
+## Guidelines
+
+### Componentize for reuse
+
+- Whenever a design element could appear more than once (buttons, cards, section headings, links, layout wrappers), make it a component in `src/components/` rather than repeating markup.
+- Keep components small, single-purpose, and driven by typed props. Prefer composition (`children`, slots) over one component with many flags.
+- Pages in `src/app/` should mostly assemble components, not define styling.
+
+### Design tokens live in Tailwind
+
+- All fonts, colors, spacing, radii, shadows, and other atomic values are defined as Tailwind theme tokens in `@theme` inside `src/app/globals.css`, and used through Tailwind utility classes.
+- No hard-coded hex values, pixel sizes, or font stacks in components, and no inline `style` for design values. If a value is missing, add a token rather than using an arbitrary value (`text-[#123456]`).
+- Load fonts with `next/font` and expose them as Tailwind font tokens.
+
+### Maintainability
+
+- Clear names, small files, and one obvious place for each thing. Put portfolio content (projects, bio, links) in typed data files (e.g. `src/content/`) separate from the components that render it, so content edits don't touch markup.
+- Avoid premature abstraction and dependencies you don't need; delete dead code rather than commenting it out.
+- Default to Server Components; add `"use client"` only to the components that need interactivity, and keep those as small as possible.
+
+### Comment interactive and dynamic code
+
+- Any code with state, effects, event handling, animation, or data-derived rendering must be commented to explain the logic: what triggers it, what state changes, and why it's done this way.
+- Static presentational markup does not need comments.
+
+### Accessibility (WCAG AA)
+
+All code must meet WCAG AA. In particular:
+
+- Semantic HTML first (`header`, `nav`, `main`, `footer`, `button` vs. `a`), one `h1` per page, and heading levels in order.
+- Color contrast of at least 4.5:1 for body text and 3:1 for large text and UI components; check new color tokens against their backgrounds.
+- Everything interactive works by keyboard, with a visible focus style (never remove outlines without a replacement).
+- Meaningful `alt` text on images (`alt=""` for decorative ones); accessible names on icon-only buttons and links.
+- Respect `prefers-reduced-motion` for animation, and don't convey information by color alone.
+- Set `lang` on `<html>` and a unique `title` on each page.
+
+### Before committing
+
+Every commit must be formatted, linted, and typechecked, and the build must pass: run `npm run format`, then `npm run check && npm run build`. Fix all errors instead of suppressing them (no `eslint-disable` or `@ts-ignore` without a comment explaining why).
+
+Lint catches only some accessibility problems. Also check contrast, keyboard navigation, and focus order by hand for UI changes.
