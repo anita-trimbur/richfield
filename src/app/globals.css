@@ -27,4 +27,16 @@
   /* Semantic defaults */
   --color-surface: var(--color-limestone-50);
   --color-ink: #2d345b;
+
+  /* Layout widths (max-w-*) */
+  --container-nav: 94.5rem; /* 1512px */
+}
+
+/* Reusable text styles */
+@utility type-title {
+  @apply text-4xl leading-none font-bold;
+}
+
+@utility type-subtitle {
+  @apply font-mono text-base leading-normal text-limestone-700 uppercase;
 }

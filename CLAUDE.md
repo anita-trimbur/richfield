@@ -41,14 +41,19 @@ npm run check      # format:check + lint + typecheck — run before every commit
 
 #### Current tokens
 
-| Token                            | Value                 | Use                                      |
-| -------------------------------- | --------------------- | ---------------------------------------- |
-| `font-sans`                      | DM Sans               | Site-wide default                        |
-| `font-mono`                      | DM Mono (300/400/500) | Targeted uses only                       |
-| `text-base`                      | 16px                  | Default body size                        |
-| `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330` | Neutral range, lightest to darkest       |
-| `surface`                        | `limestone-50`        | Default background                       |
-| `ink`                            | `#2D345B`             | Default text color (11.9:1 on `surface`) |
+| Token                            | Value                                                       | Use                                      |
+| -------------------------------- | ----------------------------------------------------------- | ---------------------------------------- |
+| `font-sans`                      | DM Sans                                                     | Site-wide default                        |
+| `font-mono`                      | DM Mono (300/400/500)                                       | Targeted uses only                       |
+| `text-base`                      | 16px                                                        | Default body size                        |
+| `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330`                                       | Neutral range, lightest to darkest       |
+| `surface`                        | `limestone-50`                                              | Default background                       |
+| `ink`                            | `#2D345B`                                                   | Default text color (11.9:1 on `surface`) |
+| `max-w-nav`                      | 1512px                                                      | Header max width                         |
+| `type-title`                     | 36px, bold, 100% line height                                | Site title / brand name                  |
+| `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase, `limestone-700` | Subtitles and labels                     |
+
+Reusable text styles are `@utility` classes in `globals.css`. Add new ones there instead of repeating utility combinations. Join conditional classes with `cx` from `@/lib/cx`.
 
 Contrast on `surface`: `limestone-700`–`900` pass AA for body text. `limestone-600` (4.47:1) and `500` (3.27:1) are only for large text or non-text UI. `limestone-400` and lighter are decorative only (borders, fills).
 
