@@ -37,6 +37,20 @@ npm run check      # format:check + lint + typecheck — run before every commit
 - All fonts, colors, spacing, radii, shadows, and other atomic values are defined as Tailwind theme tokens in `@theme` inside `src/app/globals.css`, and used through Tailwind utility classes.
 - No hard-coded hex values, pixel sizes, or font stacks in components, and no inline `style` for design values. If a value is missing, add a token rather than using an arbitrary value (`text-[#123456]`).
 - Load fonts with `next/font` and expose them as Tailwind font tokens.
+- Don't set a pixel `font-size` on `html`. `text-base` (1rem, which is 16px by default) keeps the site respecting users' browser font-size settings.
+
+#### Current tokens
+
+| Token                            | Value                 | Use                                      |
+| -------------------------------- | --------------------- | ---------------------------------------- |
+| `font-sans`                      | DM Sans               | Site-wide default                        |
+| `font-mono`                      | DM Mono (300/400/500) | Targeted uses only                       |
+| `text-base`                      | 16px                  | Default body size                        |
+| `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330` | Neutral range, lightest to darkest       |
+| `surface`                        | `limestone-50`        | Default background                       |
+| `ink`                            | `#2D345B`             | Default text color (11.9:1 on `surface`) |
+
+Contrast on `surface`: `limestone-700`–`900` pass AA for body text. `limestone-600` (4.47:1) and `500` (3.27:1) are only for large text or non-text UI. `limestone-400` and lighter are decorative only (borders, fills).
 
 ### Maintainability
 

@@ -1,1 +1,30 @@
 @import "tailwindcss";
+
+/*
+ * Fonts are loaded by next/font in layout.tsx, which sets --font-dm-sans and
+ * --font-dm-mono on <html>. `inline` makes the utilities use those variables
+ * directly. Tailwind's preflight applies --font-sans to <html>, so DM Sans is
+ * the site-wide default; use `font-mono` for DM Mono.
+ */
+@theme inline {
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, monospace;
+}
+
+@theme {
+  /* Limestone neutral range, lightest (50) to darkest (900). */
+  --color-limestone-50: #fefff5;
+  --color-limestone-100: #e8e8df;
+  --color-limestone-200: #d2d2c9;
+  --color-limestone-300: #bbbbb2;
+  --color-limestone-400: #a4a49d;
+  --color-limestone-500: #8e8e87;
+  --color-limestone-600: #777771;
+  --color-limestone-700: #60605b;
+  --color-limestone-800: #4a4a46;
+  --color-limestone-900: #333330;
+
+  /* Semantic defaults */
+  --color-surface: var(--color-limestone-50);
+  --color-ink: #2d345b;
+}
