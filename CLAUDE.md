@@ -50,6 +50,9 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 | `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330`                                       | Neutral range, lightest to darkest                          |
 | `surface`                        | `limestone-50`                                              | Default background                                          |
 | `ink`                            | `#2D345B`                                                   | Default text color (11.9:1 on `surface`)                    |
+| `size-icon`                      | 18px                                                        | Default icon size                                           |
+| `gap-icon-label`                 | 6px                                                         | Space between an icon and its label                         |
+| `pr-icon-with-label`             | `icon` + `icon-label` (24px)                                | Balances an icon's space on the other side of a label       |
 | `max-w-nav`                      | 1512px                                                      | Header max width                                            |
 | `type-title`                     | 36px, bold, 100% line height                                | Site title / brand name                                     |
 | `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase, `limestone-700` | Subtitles and labels                                        |
@@ -58,6 +61,10 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 Reusable text styles are `@utility` classes in `globals.css`. Add new ones there instead of repeating utility combinations. Join conditional classes with `cx` from `@/lib/cx`.
 
 Contrast on `surface`: `limestone-700`–`900` pass AA for body text. `limestone-600` (4.47:1) and `500` (3.27:1) are only for large text or non-text UI. `limestone-400` and lighter are decorative only (borders, fills).
+
+### Icons
+
+Icons live in `src/components/icons/`, one component per glyph, each wrapping the shared `Icon`. They render at `size-icon` (18px) in `ink` by default; pass `className` to override (`size-6`, `text-limestone-700`). To add one, copy an existing icon, paste the source SVG's `viewBox` and path data, and drop hard-coded `fill`/`stroke` colors so the glyph uses `currentColor`. Keep license notes for third-party icons (e.g. Font Awesome, CC BY 4.0). Icons are hidden from screen readers unless given a `label`; set one only when the icon stands alone without visible text or a labeled parent.
 
 ### Brand mark
 

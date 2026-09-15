@@ -28,6 +28,14 @@
   --color-surface: var(--color-limestone-50);
   --color-ink: #2d345b;
 
+  /* Sizes (size-*, w-*, h-*) */
+  --spacing-icon: 1.125rem; /* 18px */
+  --spacing-icon-label: 0.375rem; /* 6px, between an icon and its label */
+  /* An icon plus its gap (24px), e.g. to balance the other side of a label. */
+  --spacing-icon-with-label: calc(
+    var(--spacing-icon) + var(--spacing-icon-label)
+  );
+
   /* Layout widths (max-w-*) */
   --container-nav: 94.5rem; /* 1512px */
 
@@ -42,6 +50,21 @@
     from {
       opacity: 0;
     }
+  }
+}
+
+/*
+ * Icon defaults, set on the <svg> rendered by the Icon component. They live in
+ * the base layer so any size-* or text-* class passed to an icon overrides
+ * them, regardless of class order. Glyphs fill with currentColor, so text-*
+ * sets the icon color.
+ */
+@layer base {
+  .icon {
+    width: var(--spacing-icon);
+    height: var(--spacing-icon);
+    flex-shrink: 0;
+    color: var(--color-ink);
   }
 }
 

@@ -1,24 +1,50 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import type { FocusEvent, PointerEvent, Ref } from "react";
 
 import type { NavItem } from "@/content/navigation";
+import { cx } from "@/lib/cx";
 
-// Treat "/work" and "/work/" as the same page.
-function normalizePath(path: string) {
-  return path.length > 1 ? path.replace(/\/$/, "") : path;
-}
+type NavLinkProps = NavItem & {
+  isCurrent: boolean;
+  /** Receives the sliding icon element, which PrimaryNavList animates. */
+  iconRef: Ref<HTMLSpanElement>;
+  onPointerEnter: (event: PointerEvent<HTMLAnchorElement>) => void;
+  onFocus: (event: FocusEvent<HTMLAnchorElement>) => void;
+};
 
-export function NavLink({ label, href }: NavItem) {
-  const isCurrent = normalizePath(usePathname()) === normalizePath(href);
-
+export function NavLink({
+  label,
+  href,
+  icon: ItemIcon,
+  isCurrent,
+  iconRef,
+  onPointerEnter,
+  onFocus,
+}: NavLinkProps) {
   return (
     <Link
       href={href}
       aria-current={isCurrent ? "page" : undefined}
-      className="aria-[current=page]:font-bold"
+      onPointerEnter={onPointerEnter}
+      onFocus={onFocus}
+      // pr-icon-with-label mirrors the icon slot and gap on the right, so the
+      // label is centered in its link.
+      className="inline-flex items-center gap-icon-label pr-icon-with-label aria-[current=page]:font-bold"
     >
+      {/*
+        The icon slot is always reserved, so the label never moves. The slot
+        clips its icon, which rests just outside it (hidden) unless this is the
+        current page; useIconSlider slides it in and out from there.
+      */}
+      <span className="overflow-hidden">
+        <span
+          ref={iconRef}
+          className={cx("block", !isCurrent && "-translate-x-full")}
+        >
+          <ItemIcon />
+        </span>
+      </span>
+
       {/*
         Reserve the bold width at all times: the ::after is an invisible,
         zero-height bold copy of the label, so the span is always as wide as
