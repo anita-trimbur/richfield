@@ -32,6 +32,7 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 - Whenever a design element could appear more than once (buttons, cards, section headings, links, layout wrappers), make it a component in `src/components/` rather than repeating markup.
 - Keep components small, single-purpose, and driven by typed props. Prefer composition (`children`, slots) over one component with many flags.
 - Pages in `src/app/` should mostly assemble components, not define styling.
+- Wrap page content in `PageContainer` (`src/components/layout/`), the same wrapper the header uses, so content width and side padding always match the header's.
 
 ### Design tokens live in Tailwind
 
@@ -50,10 +51,16 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 | `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330`                                       | Neutral range, lightest to darkest                          |
 | `surface`                        | `limestone-50`                                              | Default background                                          |
 | `ink`                            | `#2D345B`                                                   | Default text color (11.9:1 on `surface`)                    |
+| `accent-sky` … `accent-peach`    | 10 standalone colors (see `globals.css`)                    | Random timeline card fills; ink is ≥ 6.7:1 on each          |
 | `size-icon`                      | 18px                                                        | Default icon size                                           |
 | `gap-icon-label`                 | 6px                                                         | Space between an icon and its label                         |
 | `pr-icon-with-label`             | `icon` + `icon-label` (24px)                                | Balances an icon's space on the other side of a label       |
-| `max-w-nav`                      | 1512px                                                      | Header max width                                            |
+| `max-w-nav`                      | 1512px                                                      | Page max width (header and content, via `PageContainer`)    |
+| `timeline-line` / `-dot`         | 4px / 12px                                                  | Timeline line and hatch thickness / endpoint diameter       |
+| `timeline-hatch`                 | 32px                                                        | Hatch length, from the line's edge to a section marker      |
+| `pl-timeline-indent`             | half dot + half line + hatch (40px)                         | Timeline content indent                                     |
+| `type-heading`                   | 20px, semibold, 24px line height                            | Timeline section headings                                   |
+| `type-card-title`                | 24px, 150% line height                                      | Card titles                                                 |
 | `type-title`                     | 36px, bold, 100% line height, `tracking-tight` (−0.025em)   | Site title / brand name                                     |
 | `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase, `limestone-700` | Subtitles and labels                                        |
 | `animate-brandmark-fallback`     | `brandmark-fallback` 300ms, 1.5s delay                      | Hides the brand mark until it draws; fades it in without JS |
@@ -74,6 +81,10 @@ Icons live in `src/components/icons/`, one component per glyph, each wrapping th
 - a plain stroked centerline tracing the pen from start to finish.
 
 Then run `npm run brandmark` to regenerate `src/content/brandmark.ts`. The script stops with an error if the SVG doesn't match that shape.
+
+### Home timeline
+
+Edit sections and cards in `src/content/timeline.ts`. Cards are `"accent"` (tall, random accent fill) or `"plain"` (short, `limestone-100`). A full-URL `href` opens in a new tab with an external-link icon; a path gets an arrow. `AccentShuffle` gives each accent card a random fill with no repeats until all 10 are used: an inline script does it on a full page load, before paint, and a layout effect does it on client-side navigation. To add or remove an accent color, change the token in `globals.css` and the list in `src/components/timeline/accentFills.ts`.
 
 ### Maintainability
 

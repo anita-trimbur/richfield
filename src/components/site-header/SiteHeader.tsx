@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { MenuIcon } from "@/components/icons/MenuIcon";
+import { PageContainer } from "@/components/layout/PageContainer";
 import { cx } from "@/lib/cx";
 
 import { BrandLockup } from "./BrandLockup";
@@ -74,7 +75,7 @@ export function SiteHeader() {
     // overflow-x-clip stops the hidden desktop areas from causing horizontal
     // scrolling on narrow screens, without clipping the menu vertically.
     <header className="overflow-x-clip">
-      <div className="mx-auto max-w-nav px-3 pt-3 pb-6 sm:px-6 sm:pt-6 sm:pb-12">
+      <PageContainer className="pt-3 pb-6 sm:pt-6 sm:pb-12">
         <div
           ref={rowRef}
           className="relative grid grid-cols-[1fr_auto_1fr] items-center"
@@ -126,7 +127,7 @@ export function SiteHeader() {
           </nav>
           <ExternalLinks />
         </div>
-      </div>
+      </PageContainer>
     </header>
   );
 }

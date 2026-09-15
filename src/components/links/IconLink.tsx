@@ -2,6 +2,7 @@ import type { ComponentType } from "react";
 
 import type { IconProps } from "@/components/icons/Icon";
 import { cx } from "@/lib/cx";
+import { isExternalHref } from "@/lib/links";
 
 export type IconLinkProps = {
   href: string;
@@ -24,7 +25,7 @@ export function IconLink({
 }: IconLinkProps) {
   // Absolute URLs point off-site, so they open in a new tab. The name says so,
   // because screen reader users otherwise get no warning of the new tab.
-  const isExternal = /^https?:\/\//.test(href);
+  const isExternal = isExternalHref(href);
 
   return (
     <a

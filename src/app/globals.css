@@ -28,12 +28,41 @@
   --color-surface: var(--color-limestone-50);
   --color-ink: #2d345b;
 
+  /*
+   * Accent fills (bg-accent-*), assigned to timeline cards at random. These are
+   * standalone colors, not a range. Ink text is at least 6.7:1 on each. Keep
+   * accentFills.ts in sync when adding or removing one.
+   */
+  --color-accent-sky: #a9c4ed;
+  --color-accent-sage: #b7dcbe;
+  --color-accent-mint: #cbe9e3;
+  --color-accent-lavender: #cdc3e9;
+  --color-accent-lime: #e2edaf;
+  --color-accent-lilac: #e9d5e7;
+  --color-accent-ochre: #ecc78f;
+  --color-accent-butter: #f3dea7;
+  --color-accent-rose: #f5c2c2;
+  --color-accent-peach: #fac9af;
+
   /* Sizes (size-*, w-*, h-*) */
   --spacing-icon: 1.125rem; /* 18px */
   --spacing-icon-label: 0.375rem; /* 6px, between an icon and its label */
   /* An icon plus its gap (24px), e.g. to balance the other side of a label. */
   --spacing-icon-with-label: calc(
     var(--spacing-icon) + var(--spacing-icon-label)
+  );
+
+  /*
+   * Timeline: a vertical line with a round dot at each end, and a hatch from
+   * the line to each section's marker box.
+   */
+  --spacing-timeline-line: 0.25rem; /* 4px, thickness of the line and hatches */
+  --spacing-timeline-dot: 0.75rem; /* 12px, endpoint diameter */
+  --spacing-timeline-hatch: 2rem; /* 32px, from the line's edge to a marker */
+  /* Content indent (40px): to the line's center, its other half, the hatch. */
+  --spacing-timeline-indent: calc(
+    var(--spacing-timeline-dot) / 2 + var(--spacing-timeline-line) / 2 +
+      var(--spacing-timeline-hatch)
   );
 
   /* Layout widths (max-w-*) */
@@ -75,4 +104,12 @@
 
 @utility type-subtitle {
   @apply font-mono text-base leading-normal text-limestone-700 uppercase;
+}
+
+@utility type-heading {
+  @apply text-xl leading-6 font-semibold;
+}
+
+@utility type-card-title {
+  @apply text-2xl leading-normal;
 }
