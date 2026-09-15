@@ -70,7 +70,7 @@
 
 /* Reusable text styles */
 @utility type-title {
-  @apply text-4xl leading-none font-bold;
+  @apply text-4xl leading-none font-bold tracking-tight;
 }
 
 @utility type-subtitle {

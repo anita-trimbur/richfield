@@ -54,7 +54,7 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 | `gap-icon-label`                 | 6px                                                         | Space between an icon and its label                         |
 | `pr-icon-with-label`             | `icon` + `icon-label` (24px)                                | Balances an icon's space on the other side of a label       |
 | `max-w-nav`                      | 1512px                                                      | Header max width                                            |
-| `type-title`                     | 36px, bold, 100% line height                                | Site title / brand name                                     |
+| `type-title`                     | 36px, bold, 100% line height, `tracking-tight` (−0.025em)   | Site title / brand name                                     |
 | `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase, `limestone-700` | Subtitles and labels                                        |
 | `animate-brandmark-fallback`     | `brandmark-fallback` 300ms, 1.5s delay                      | Hides the brand mark until it draws; fades it in without JS |
 
