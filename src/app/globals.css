@@ -30,6 +30,19 @@
 
   /* Layout widths (max-w-*) */
   --container-nav: 94.5rem; /* 1512px */
+
+  /*
+   * Animations (animate-*)
+   * brandmark-fallback: hides the brand mark until BrandMark starts drawing it,
+   * and fades it in if that never happens (JavaScript unavailable).
+   */
+  --animate-brandmark-fallback: brandmark-fallback 300ms ease-out 1.5s both;
+
+  @keyframes brandmark-fallback {
+    from {
+      opacity: 0;
+    }
+  }
 }
 
 /* Reusable text styles */

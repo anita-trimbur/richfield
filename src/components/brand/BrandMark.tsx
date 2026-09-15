@@ -1,16 +1,88 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
+import {
+  brandmarkOutline,
+  brandmarkSides,
+  brandmarkViewBox,
+} from "@/content/brandmark";
+import { partialStrokeOutline } from "@/lib/stroke-outline";
+
+/** How long the pen takes to draw the whole mark. */
+const DRAW_DURATION_MS = 1600;
+
 type BrandMarkProps = {
   className?: string;
 };
 
 /**
- * Brand icon. Fills with `currentColor`, so set its color with a text color
- * utility on it or a parent (e.g. `text-ink`). Size it with `size-*`.
- * Decorative: always pair it with visible text or an accessible label.
+ * Brand icon, drawn on like a pen stroke when the page loads. Fills with
+ * `currentColor`, so set its color with a text color utility on it or a parent
+ * (e.g. `text-ink`). Size it by width (`w-*`); the height follows the mark's
+ * proportions. Decorative: always pair it with visible text or an accessible
+ * label.
  */
 export function BrandMark({ className }: BrandMarkProps) {
+  const pathRef = useRef<SVGPathElement>(null);
+
+  // Draws the mark once, after hydration.
+  //
+  // The static HTML holds the finished mark, kept hidden for a moment by the
+  // `brandmark-fallback` animation (motion-safe only), so it doesn't flash
+  // fully drawn before this effect erases it. If JavaScript never runs, the
+  // fallback fades it in instead. Setting `data-drawing` turns the fallback
+  // off.
+  //
+  // Frames write the path's `d` attribute directly instead of going through
+  // React state, so drawing doesn't re-render 60 times a second. React leaves
+  // the attribute alone afterwards because the `d` prop never changes.
+  useEffect(() => {
+    const path = pathRef.current;
+    if (!path) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    // Hydration was slow enough that the fallback has started showing the
+    // finished mark; erasing and redrawing it now would look like a glitch.
+    const alreadyShown = getComputedStyle(path).opacity !== "0";
+    if (reduceMotion || alreadyShown) return;
+
+    let frame = 0;
+    let start: number | undefined;
+
+    const drawFrame = (now: number) => {
+      start ??= now;
+      const elapsed = Math.min((now - start) / DRAW_DURATION_MS, 1);
+      if (elapsed < 1) {
+        path.setAttribute(
+          "d",
+          partialStrokeOutline(brandmarkSides, easeInOutCubic(elapsed)),
+        );
+        frame = requestAnimationFrame(drawFrame);
+      } else {
+        // End on the exact exported outline rather than the rebuilt one.
+        path.setAttribute("d", brandmarkOutline);
+      }
+    };
+
+    path.dataset.drawing = "";
+    path.setAttribute("d", "");
+    frame = requestAnimationFrame(drawFrame);
+
+    // Stopped early (unmounted, or re-run by Strict Mode in development):
+    // restore the finished mark and the fallback, so a re-run starts clean.
+    return () => {
+      cancelAnimationFrame(frame);
+      path.setAttribute("d", brandmarkOutline);
+      delete path.dataset.drawing;
+    };
+  }, []);
+
   return (
     <svg
-      viewBox="0 0 36 36"
+      viewBox={brandmarkViewBox}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
@@ -18,11 +90,16 @@ export function BrandMark({ className }: BrandMarkProps) {
       className={className}
     >
       <path
-        fillRule="evenodd"
-        clipRule="evenodd"
+        ref={pathRef}
+        d={brandmarkOutline}
         fill="currentColor"
-        d="M8.01175 19.9343C8.14538 19.7874 8.03075 19.5813 7.80467 19.5495C6.80541 19.4089 5.73252 19.1221 4.88504 18.526C3.96837 17.8813 3.4916 16.9976 3.4916 15.9851C3.49162 14.6842 3.84514 13.1754 5.41347 12.421C7.04466 11.6364 8.847 12.1918 10.036 12.7669C10.7489 13.1118 11.4971 13.5818 12.2654 14.1622C12.4145 14.2748 12.6584 14.2541 12.7697 14.1171L24.1439 0.11793C24.3181 -0.0964198 24.7403 0.000585049 24.7403 0.25495V13.8402C24.7403 13.9953 24.9152 14.1144 25.1104 14.0921L35.629 12.8922C36.0013 12.8497 36.1505 13.2568 35.8066 13.3767L24.9327 17.1681C24.8157 17.2089 24.7403 17.3001 24.7403 17.4007V35.7352C24.7403 36.0333 24.1434 36.1044 24.0277 35.8205C23.0728 33.4774 21.166 29.3072 18.3549 25.4783C14.9618 20.8569 13.5201 19.8511 13.0901 19.635C13.0019 19.5907 12.8977 19.6108 12.8225 19.668L0.552707 29.0006C0.269427 29.2161 -0.164819 28.9216 0.0644972 28.6696L8.01175 19.9343ZM17.2761 19.2001C17.1573 19.0515 17.2587 18.8545 17.4754 18.8128C18.6435 18.5879 19.7289 18.3492 20.6399 18.1356C20.6829 18.1255 20.7261 18.1152 20.7683 18.105C20.812 18.0945 20.8567 18.1202 20.8567 18.1561V23.2659C20.8567 23.5397 20.3726 23.624 20.2203 23.3778C19.6676 22.4839 19.0485 21.5587 18.3549 20.6109C17.9991 20.1247 17.6388 19.654 17.2761 19.2001ZM19.5303 15.2089C18.6831 15.4076 17.6934 15.6252 16.6404 15.8294C16.3589 15.884 16.1401 15.6411 16.2962 15.449L20.2604 10.5698C20.4345 10.3554 20.8567 10.4524 20.8567 10.7068V14.7002C20.8567 14.8108 20.7659 14.9088 20.6319 14.9423C20.3054 15.0237 19.9352 15.114 19.5303 15.2089ZM8.4886 16.5433C7.85992 16.4548 7.57624 16.3216 7.47409 16.2498L7.46831 16.2458C7.43398 16.2224 7.37516 16.1823 7.37516 15.9851C7.37517 15.7608 7.38956 15.5819 7.41036 15.4403C7.43298 15.2862 7.6372 15.2042 7.80955 15.2796C7.86852 15.3054 7.93235 15.3347 8.00125 15.368C8.40771 15.5646 8.86495 15.8444 9.36194 16.2056C9.5728 16.3589 9.43023 16.6245 9.14396 16.6071C8.91087 16.593 8.6919 16.5719 8.4886 16.5433Z"
+        className="motion-safe:not-data-drawing:animate-brandmark-fallback"
       />
     </svg>
   );
+}
+
+/** Starts and ends slowly, like a pen setting down and lifting off. */
+function easeInOutCubic(x: number) {
+  return x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2;
 }
