@@ -9,14 +9,22 @@ type TimelineMarkerProps = {
 
 /**
  * A section's icon box, with the hatch joining it to the timeline line.
- * Decorative: the section heading names the role and company.
+ * Decorative: the section heading names the role and company. The box's
+ * outline is its own layer, so it can draw on (see TimelineReveal) while the
+ * box clips the icon sliding in.
  */
 export function TimelineMarker({ icon: MarkerIcon }: TimelineMarkerProps) {
   return (
     <div aria-hidden="true" className="relative shrink-0">
-      <span className="absolute top-1/2 right-full h-timeline-line w-timeline-hatch -translate-y-1/2 bg-ink" />
-      <span className="flex size-12 items-center justify-center rounded-xs border-3 border-ink bg-surface">
-        {MarkerIcon && <MarkerIcon className="size-7" />}
+      <span
+        data-timeline-hatch
+        className="absolute top-1/2 right-full h-timeline-line w-timeline-hatch origin-left -translate-y-1/2 bg-ink timeline-pending:opacity-0 timeline-revealed:animate-timeline-hatch"
+      />
+      <span className="relative flex size-12 items-center justify-center overflow-hidden rounded-xs bg-surface">
+        <span className="absolute inset-0 rounded-xs border-3 border-ink timeline-pending:opacity-0 timeline-revealed:animate-timeline-box timeline-revealed:timeline-box-mask" />
+        {MarkerIcon && (
+          <MarkerIcon className="size-7 timeline-pending:opacity-0 timeline-revealed:animate-timeline-icon" />
+        )}
       </span>
     </div>
   );

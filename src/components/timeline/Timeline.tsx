@@ -3,6 +3,7 @@ import type { TimelineSection as TimelineSectionData } from "@/content/timeline"
 import { AccentShuffle } from "./AccentShuffle";
 import { accentFills } from "./accentFills";
 import { TimelineCard } from "./TimelineCard";
+import { TimelineReveal } from "./TimelineReveal";
 import { TimelineSection } from "./TimelineSection";
 
 type TimelineProps = {
@@ -19,15 +20,21 @@ export function Timeline({ sections }: TimelineProps) {
     .filter((card) => card.variant === "accent");
 
   return (
-    <div className="relative pt-9 pb-3 pl-timeline-indent">
+    <TimelineReveal className="relative pt-9 pb-3 pl-timeline-indent">
       {/* The line, with a dot at each end. */}
       <div
         aria-hidden="true"
         className="absolute inset-y-0 left-0 flex w-timeline-dot justify-center"
       >
-        <span className="w-timeline-line bg-ink" />
+        <span
+          data-timeline-line
+          className="w-timeline-line origin-top bg-ink timeline-drawing:scale-y-(--timeline-drawn)"
+        />
         <span className="absolute top-0 size-timeline-dot rounded-full bg-ink" />
-        <span className="absolute bottom-0 size-timeline-dot rounded-full bg-ink" />
+        <span
+          data-timeline-end
+          className="absolute bottom-0 size-timeline-dot rounded-full bg-ink timeline-pending:opacity-0 timeline-revealed:animate-timeline-end"
+        />
       </div>
 
       <AccentShuffle>
@@ -38,7 +45,11 @@ export function Timeline({ sections }: TimelineProps) {
               {...section}
             >
               {cards.map((card) => (
-                <li key={card.href}>
+                <li
+                  key={card.href}
+                  data-timeline-reveal="card"
+                  className="timeline-pending:opacity-0 timeline-revealed:animate-timeline-deal"
+                >
                   <TimelineCard
                     {...card}
                     fallbackFill={
@@ -53,6 +64,6 @@ export function Timeline({ sections }: TimelineProps) {
           ))}
         </ol>
       </AccentShuffle>
-    </div>
+    </TimelineReveal>
   );
 }

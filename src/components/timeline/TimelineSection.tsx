@@ -18,11 +18,11 @@ export function TimelineSection({
 }: TimelineSectionProps) {
   return (
     <li className="flex flex-col gap-6">
-      <div className="flex items-start gap-3">
+      <div data-timeline-reveal="section" className="flex items-start gap-3">
         <TimelineMarker icon={icon} />
         {/* Reversed so screen readers reach the heading first, while the
             period still shows above it. */}
-        <div className="flex flex-col-reverse">
+        <div className="flex flex-col-reverse timeline-pending:opacity-0 timeline-revealed:animate-timeline-label">
           <h2 className="type-heading">
             {heading}
             {company && (
@@ -41,7 +41,9 @@ export function TimelineSection({
         </div>
       </div>
 
-      <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {/* Isolated so cards dealt out from under each other (see
+          TimelineReveal) stack only among themselves. */}
+      <ul className="isolate grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {children}
       </ul>
     </li>

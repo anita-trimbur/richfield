@@ -80,6 +80,147 @@
       opacity: 0;
     }
   }
+
+  /*
+   * Timeline reveal (see TimelineReveal). When the line reaches a section, its
+   * hatch draws out to the box, the box outline draws around, then the label
+   * fades in as the icon slides into the box. Cards deal out from the left.
+   * Delays are measured from when the line reaches that section or card row.
+   */
+  --animate-timeline-fallback: timeline-fade 300ms ease-out 1.5s both;
+  --animate-timeline-end: timeline-pop 200ms var(--ease-out) both;
+  --animate-timeline-hatch: timeline-hatch 160ms linear both;
+  --animate-timeline-box: timeline-box 240ms var(--ease-out) 160ms both;
+  --animate-timeline-label: timeline-fade 320ms var(--ease-out) 400ms both;
+  --animate-timeline-icon: timeline-icon 320ms var(--ease-out) 400ms both;
+  /* How far left of its column the first card starts. */
+  --spacing-timeline-deal: 3rem; /* 48px */
+
+  @keyframes timeline-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes timeline-pop {
+    from {
+      scale: 0;
+    }
+  }
+
+  /* Grows rightward from the line; set origin-left on the hatch. */
+  @keyframes timeline-hatch {
+    from {
+      scale: 0 1;
+    }
+  }
+
+  /* Sweeps the outline in (needs timeline-box-mask). */
+  @keyframes timeline-box {
+    from {
+      --timeline-box-sweep: 0deg;
+    }
+  }
+
+  /* Starts just past the box's left edge, which clips it. */
+  @keyframes timeline-icon {
+    from {
+      translate: -150% 0;
+    }
+  }
+
+  /*
+   * Starts stacked left of the list's first column, so each card travels its
+   * own column's offset (--timeline-deal-from, set per card) plus the nudge.
+   * Each card stays under the ones before it (--timeline-deal-order, set per
+   * card; the list needs `isolate`), so it slides out from beneath them, and
+   * turns opaque early so the stack doesn't show through.
+   */
+  @keyframes timeline-deal {
+    0% {
+      opacity: 0;
+      translate: calc(
+          var(--timeline-deal-from, 0px) - var(--spacing-timeline-deal)
+        )
+        0;
+      z-index: calc(var(--timeline-deal-order, 0) * -1);
+    }
+    40% {
+      opacity: 1;
+    }
+    100% {
+      z-index: calc(var(--timeline-deal-order, 0) * -1);
+    }
+  }
+}
+
+/*
+ * Inlined into the utility rather than read from :root, so the delay picks up
+ * each card's own --timeline-deal-order (0, 1, 2… within a row, set by
+ * TimelineReveal) and cards spread out one after another.
+ */
+@theme inline {
+  --animate-timeline-deal: timeline-deal 450ms var(--ease-out)
+    calc(var(--timeline-deal-order, 0) * 80ms) both;
+}
+
+/*
+ * Timeline reveal states, applied by TimelineReveal while it draws the line.
+ * All three are screen-only and skipped for reduced motion, so printouts and
+ * reduced-motion users get the static timeline.
+ *
+ * - timeline-drawing: anywhere inside the timeline once drawing has begun.
+ * - timeline-pending: the line hasn't yet reached the element's reveal scope
+ *   (the nearest [data-timeline-reveal], itself included). Hide it here.
+ * - timeline-revealed: the line has reached the scope, marking it
+ *   [data-revealed="animate"]. Play the element's entrance animation here,
+ *   with fill `both` so it stays hidden through its delay. A scope that
+ *   receives keyboard focus first is marked "instant" and skips it.
+ */
+@custom-variant timeline-drawing {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    [data-timeline-drawing] & {
+      @slot;
+    }
+  }
+}
+
+@custom-variant timeline-pending {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    [data-timeline-drawing] &:not([data-revealed], [data-revealed] *) {
+      @slot;
+    }
+  }
+}
+
+@custom-variant timeline-revealed {
+  @media screen and (prefers-reduced-motion: no-preference) {
+    [data-timeline-drawing]
+      &:is([data-revealed="animate"], [data-revealed="animate"] *) {
+      @slot;
+    }
+  }
+}
+
+/* Animatable, so timeline-box can sweep it. 180deg shows the whole outline. */
+@property --timeline-box-sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 180deg;
+}
+
+/*
+ * Shows the element's outline from its left middle, around both the top and
+ * bottom halves at once, to the right middle, as --timeline-box-sweep goes
+ * from 0deg to 180deg.
+ */
+@utility timeline-box-mask {
+  mask-image: conic-gradient(
+    from 270deg,
+    black var(--timeline-box-sweep),
+    transparent 0 calc(360deg - var(--timeline-box-sweep)),
+    black 0
+  );
 }
 
 /*

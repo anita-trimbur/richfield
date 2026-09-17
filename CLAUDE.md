@@ -64,6 +64,9 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 | `type-title`                     | 36px, bold, 100% line height, `tracking-tight` (−0.025em)   | Site title / brand name                                     |
 | `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase, `limestone-700` | Subtitles and labels                                        |
 | `animate-brandmark-fallback`     | `brandmark-fallback` 300ms, 1.5s delay                      | Hides the brand mark until it draws; fades it in without JS |
+| `animate-timeline-*`             | 160–450ms entrances (see `globals.css`)                     | Timeline reveal: hatch, box, label, icon, card deal, end    |
+| `animate-timeline-fallback`      | fade 300ms, 1.5s delay                                      | Hides the timeline until it draws; fades it in without JS   |
+| `timeline-deal`                  | 48px                                                        | How far left of its column a dealt card starts              |
 
 Reusable text styles are `@utility` classes in `globals.css`. Add new ones there instead of repeating utility combinations. Join conditional classes with `cx` from `@/lib/cx`.
 
@@ -85,6 +88,8 @@ Then run `npm run brandmark` to regenerate `src/content/brandmark.ts`. The scrip
 ### Home timeline
 
 Edit sections and cards in `src/content/timeline.ts`. Cards are `"accent"` (tall, random accent fill) or `"plain"` (short, `limestone-100`). A full-URL `href` opens in a new tab with an external-link icon; a path gets an arrow. `AccentShuffle` gives each accent card a random fill with no repeats until all 10 are used: an inline script does it on a full page load, before paint, and a layout effect does it on client-side navigation. To add or remove an accent color, change the token in `globals.css` and the list in `src/components/timeline/accentFills.ts`.
+
+`TimelineReveal` draws the line down as the visitor scrolls (its tip sits 80% down the viewport) and reveals each part as the line reaches it: a section's hatch, box outline, then label and icon; then its cards, dealt out left to right. It only decides when, by marking `[data-timeline-reveal]` elements `data-revealed`. Each part styles itself with the `timeline-pending:` (hide) and `timeline-revealed:` (play entrance) variants, and timings live in the `animate-timeline-*` tokens. To animate a new part, give it both variants and put it inside an existing reveal scope. Reduced motion, print, and no-JS get the static timeline. Keyboard focus shows its part at once, so a focused element is never hidden.
 
 ### Maintainability
 
