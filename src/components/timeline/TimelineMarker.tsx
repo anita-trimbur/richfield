@@ -20,10 +20,11 @@ export function TimelineMarker({ icon: MarkerIcon }: TimelineMarkerProps) {
         data-timeline-hatch
         className="absolute top-1/2 right-full h-timeline-line w-timeline-hatch origin-left -translate-y-1/2 bg-ink timeline-pending:opacity-0 timeline-revealed:animate-timeline-hatch"
       />
-      <span className="relative flex size-12 items-center justify-center overflow-hidden rounded-xs bg-surface">
-        <span className="absolute inset-0 rounded-xs border-3 border-ink timeline-pending:opacity-0 timeline-revealed:animate-timeline-box timeline-revealed:timeline-box-mask" />
+      <span className="relative flex size-12 items-center justify-center overflow-hidden rounded-sm bg-surface">
+        {/* 4px, the same weight as the line and hatch that draw the box on. */}
+        <span className="absolute inset-0 rounded-sm border-4 border-ink timeline-pending:opacity-0 timeline-revealed:animate-timeline-box timeline-revealed:timeline-box-mask" />
         {MarkerIcon && (
-          <MarkerIcon className="size-7 timeline-pending:opacity-0 timeline-revealed:animate-timeline-icon" />
+          <MarkerIcon className="size-8 timeline-pending:opacity-0 timeline-revealed:animate-timeline-icon" />
         )}
       </span>
     </div>

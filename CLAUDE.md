@@ -76,7 +76,9 @@ Contrast on `surface`: `limestone-700`–`900` pass AA for body text. `limestone
 
 ### Icons
 
-Icons live in `src/components/icons/`, one component per glyph, each wrapping the shared `Icon`. They render at `size-icon` (18px) in `ink` by default; pass `className` to override (`size-6`, `text-limestone-700`). To add one, copy an existing icon, paste the source SVG's `viewBox` and path data, and drop hard-coded `fill`/`stroke` colors so the glyph uses `currentColor`. Keep license notes for third-party icons (e.g. Font Awesome, CC BY 4.0). Icons are hidden from screen readers unless given a `label`; set one only when the icon stands alone without visible text or a labeled parent.
+Icons live in `src/components/icons/`, one component per glyph, each wrapping the shared `Icon`. They render at `size-icon` (18px) in `ink` by default; pass `className` to override (`size-6`, `text-limestone-700`). To add one, copy an existing icon, paste the source SVG's `viewBox` and path data, and drop hard-coded `fill`/`stroke` colors so the glyph uses `currentColor`. Keep license notes for third-party icons (e.g. Font Awesome, CC BY 4.0).
+
+Brand logos are the one exception to both rules: keep the source SVG's own `fill` values on their paths, hex and all (`MultiToolIcon`, `PulumiIcon`). A logo's colors belong to the asset, not to this site's palette, so they don't become theme tokens — that would put them in every color utility and invite use elsewhere. Such an icon takes a size from `className` but ignores text color. Note it in the component's doc comment. Icons are hidden from screen readers unless given a `label`; set one only when the icon stands alone without visible text or a labeled parent.
 
 ### Brand mark
 
@@ -89,7 +91,7 @@ Then run `npm run brandmark` to regenerate `src/content/brandmark.ts`. The scrip
 
 ### Home timeline
 
-Edit sections and cards in `src/content/timeline.ts`. Cards are `"accent"` (tall, random accent fill) or `"plain"` (short, `limestone-100`). A full-URL `href` opens in a new tab with an external-link icon; a path gets an arrow. `AccentShuffle` gives each accent card a random fill with no repeats until all 10 are used: an inline script does it on a full page load, before paint, and a layout effect does it on client-side navigation. To add or remove an accent color, change the token in `globals.css` and both class lists in `src/lib/accents.ts` (fills for cards, text colors for footer tiles; same order in each).
+Edit sections and cards in `src/content/timeline.ts`. Cards are `"accent"` (tall, random accent fill) or `"plain"` (short, `limestone-100`). A full-URL `href` opens in a new tab with an external-link icon; a path gets an arrow. A section's `icon` is an icon component from `src/components/icons/`, drawn at 32px in its marker box (`TimelineMarker` sets that size for all of them); a section without one gets an empty box. `AccentShuffle` gives each accent card a random fill with no repeats until all 10 are used: an inline script does it on a full page load, before paint, and a layout effect does it on client-side navigation. To add or remove an accent color, change the token in `globals.css` and both class lists in `src/lib/accents.ts` (fills for cards, text colors for footer tiles; same order in each).
 
 Hovering or focusing an accent card slides a card-specific image out of its top edge while the title slides to the bottom, both driven by one `grid-template-rows` transition (the `card-image-rows` / `card-image-rows-open` utilities in `globals.css`). Neither state changes how tall a card wants to be, so opening one never resizes its row. Set a card's `image` in `timeline.ts`; until one has it, the card shows a solid `limestone-300` placeholder. Plain cards have no image; they keep their centered title and deepen their fill to `limestone-200` on hover instead.
 

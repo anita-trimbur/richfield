@@ -1,6 +1,10 @@
 import type { ComponentType } from "react";
 
+import { DinosaurIcon } from "@/components/icons/DinosaurIcon";
+import { GradCapIcon } from "@/components/icons/GradCapIcon";
 import type { IconProps } from "@/components/icons/Icon";
+import { MultiToolIcon } from "@/components/icons/MultiToolIcon";
+import { PulumiIcon } from "@/components/icons/PulumiIcon";
 
 export type TimelineCard = {
   title: string;
@@ -43,6 +47,7 @@ export const timeline: TimelineSection[] = [
     heading: "Founding product designer for",
     // Placeholder URL: replace with MultiTool's site.
     company: { name: "MultiTool", href: "https://example.com/" },
+    icon: MultiToolIcon,
     cards: [
       {
         title: "From zero to MVP in three months",
@@ -67,6 +72,7 @@ export const timeline: TimelineSection[] = [
     period: "Dec ’21 – Mar ’24",
     heading: "UX designer (I, II, & Sr. I) @",
     company: { name: "Pulumi", href: "https://www.pulumi.com/" },
+    icon: PulumiIcon,
     cards: [
       {
         title:
@@ -91,6 +97,7 @@ export const timeline: TimelineSection[] = [
   {
     period: "Sep ’20 – Dec ’21",
     heading: "Transition to design",
+    icon: GradCapIcon,
     cards: [
       {
         title:
@@ -103,6 +110,7 @@ export const timeline: TimelineSection[] = [
   {
     period: "Another era",
     heading: "Pre-design",
+    icon: DinosaurIcon,
     cards: [
       // Placeholder URLs: replace with the real sites.
       {
