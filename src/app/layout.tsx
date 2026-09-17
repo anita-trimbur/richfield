@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Mono, DM_Sans } from "next/font/google";
 
+import { SiteFooter } from "@/components/site-footer/SiteFooter";
 import { SiteHeader } from "@/components/site-header/SiteHeader";
 import { site } from "@/content/site";
 
@@ -32,9 +33,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${dmSans.variable} ${dmMono.variable}`}>
-      <body className="bg-surface text-base text-ink antialiased">
+      {/* A column at least a screen tall, so the footer's mt-auto can push
+          it to the bottom on a page whose content doesn't fill the viewport. */}
+      <body className="flex min-h-dvh flex-col bg-surface text-base text-ink antialiased">
         <SiteHeader />
         {children}
+        <SiteFooter />
       </body>
     </html>
   );

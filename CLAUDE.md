@@ -43,32 +43,32 @@ npm run brandmark  # regenerate src/content/brandmark.ts after editing brandmark
 
 #### Current tokens
 
-| Token                            | Value                                                       | Use                                                         |
-| -------------------------------- | ----------------------------------------------------------- | ----------------------------------------------------------- |
-| `font-sans`                      | DM Sans                                                     | Site-wide default                                           |
-| `font-mono`                      | DM Mono (300/400/500)                                       | Targeted uses only                                          |
-| `text-base`                      | 16px                                                        | Default body size                                           |
-| `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330`                                       | Neutral range, lightest to darkest                          |
-| `surface`                        | `limestone-50`                                              | Default background                                          |
-| `ink`                            | `#2D345B`                                                   | Default text color (11.9:1 on `surface`)                    |
-| `accent-sky` … `accent-peach`    | 10 standalone colors (see `globals.css`)                    | Random timeline card fills; ink is ≥ 6.7:1 on each          |
-| `size-icon`                      | 18px                                                        | Default icon size                                           |
-| `gap-icon-label`                 | 6px                                                         | Space between an icon and its label                         |
-| `pr-icon-with-label`             | `icon` + `icon-label` (24px)                                | Balances an icon's space on the other side of a label       |
-| `max-w-nav`                      | 1512px                                                      | Page max width (header and content, via `PageContainer`)    |
-| `timeline-line` / `-dot`         | 4px / 12px                                                  | Timeline line and hatch thickness / endpoint diameter       |
-| `timeline-hatch`                 | 32px                                                        | Hatch length, from the line's edge to a section marker      |
-| `pl-timeline-indent`             | half dot + half line + hatch (40px)                         | Timeline content indent                                     |
-| `rounded-card-image`             | 8px                                                         | Radius of an accent card's hover image                      |
-| `card-image-gap`                 | 24px                                                        | Least space between that image and the card title           |
-| `type-heading`                   | 20px, semibold, 24px line height                            | Timeline section headings                                   |
-| `type-card-title`                | 24px, 150% line height                                      | Card titles                                                 |
-| `type-title`                     | 36px, bold, 100% line height, `tracking-tight` (−0.025em)   | Site title / brand name                                     |
-| `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase, `limestone-700` | Subtitles and labels                                        |
-| `animate-brandmark-fallback`     | `brandmark-fallback` 300ms, 1.5s delay                      | Hides the brand mark until it draws; fades it in without JS |
-| `animate-timeline-*`             | 160–450ms entrances (see `globals.css`)                     | Timeline reveal: hatch, box, label, icon, card deal, end    |
-| `animate-timeline-fallback`      | fade 300ms, 1.5s delay                                      | Hides the timeline until it draws; fades it in without JS   |
-| `timeline-deal`                  | 48px                                                        | How far left of its column a dealt card starts              |
+| Token                            | Value                                                     | Use                                                         |
+| -------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
+| `font-sans`                      | DM Sans                                                   | Site-wide default                                           |
+| `font-mono`                      | DM Mono (300/400/500)                                     | Targeted uses only                                          |
+| `text-base`                      | 16px                                                      | Default body size                                           |
+| `limestone-50` … `limestone-900` | `#FEFFF5` … `#333330`                                     | Neutral range, lightest to darkest                          |
+| `surface`                        | `limestone-50`                                            | Default background                                          |
+| `ink`                            | `#2D345B`                                                 | Default text color (11.9:1 on `surface`)                    |
+| `accent-sky` … `accent-peach`    | 10 standalone colors (see `globals.css`)                  | Random timeline card fills; ink is ≥ 6.7:1 on each          |
+| `size-icon`                      | 18px                                                      | Default icon size                                           |
+| `gap-icon-label`                 | 6px                                                       | Space between an icon and its label                         |
+| `pr-icon-with-label`             | `icon` + `icon-label` (24px)                              | Balances an icon's space on the other side of a label       |
+| `max-w-nav`                      | 1512px                                                    | Page max width (header and content, via `PageContainer`)    |
+| `timeline-line` / `-dot`         | 4px / 12px                                                | Timeline line and hatch thickness / endpoint diameter       |
+| `timeline-hatch`                 | 32px                                                      | Hatch length, from the line's edge to a section marker      |
+| `pl-timeline-indent`             | half dot + half line + hatch (40px)                       | Timeline content indent                                     |
+| `rounded-card-image`             | 8px                                                       | Radius of an accent card's hover image                      |
+| `card-image-gap`                 | 24px                                                      | Least space between that image and the card title           |
+| `type-heading`                   | 20px, semibold, 24px line height                          | Timeline section headings                                   |
+| `type-card-title`                | 24px, 150% line height                                    | Card titles                                                 |
+| `type-title`                     | 36px, bold, 100% line height, `tracking-tight` (−0.025em) | Site title / brand name                                     |
+| `type-subtitle`                  | DM Mono, 16px, 150% line height, uppercase (no color)     | Subtitles and labels; set the color at the call site        |
+| `animate-brandmark-fallback`     | `brandmark-fallback` 300ms, 1.5s delay                    | Hides the brand mark until it draws; fades it in without JS |
+| `animate-timeline-*`             | 160–450ms entrances (see `globals.css`)                   | Timeline reveal: hatch, box, label, icon, card deal, end    |
+| `animate-timeline-fallback`      | fade 300ms, 1.5s delay                                    | Hides the timeline until it draws; fades it in without JS   |
+| `timeline-deal`                  | 48px                                                      | How far left of its column a dealt card starts              |
 
 Reusable text styles are `@utility` classes in `globals.css`. Add new ones there instead of repeating utility combinations. Join conditional classes with `cx` from `@/lib/cx`.
 
@@ -89,11 +89,19 @@ Then run `npm run brandmark` to regenerate `src/content/brandmark.ts`. The scrip
 
 ### Home timeline
 
-Edit sections and cards in `src/content/timeline.ts`. Cards are `"accent"` (tall, random accent fill) or `"plain"` (short, `limestone-100`). A full-URL `href` opens in a new tab with an external-link icon; a path gets an arrow. `AccentShuffle` gives each accent card a random fill with no repeats until all 10 are used: an inline script does it on a full page load, before paint, and a layout effect does it on client-side navigation. To add or remove an accent color, change the token in `globals.css` and the list in `src/components/timeline/accentFills.ts`.
+Edit sections and cards in `src/content/timeline.ts`. Cards are `"accent"` (tall, random accent fill) or `"plain"` (short, `limestone-100`). A full-URL `href` opens in a new tab with an external-link icon; a path gets an arrow. `AccentShuffle` gives each accent card a random fill with no repeats until all 10 are used: an inline script does it on a full page load, before paint, and a layout effect does it on client-side navigation. To add or remove an accent color, change the token in `globals.css` and both class lists in `src/lib/accents.ts` (fills for cards, text colors for footer tiles; same order in each).
 
 Hovering or focusing an accent card slides a card-specific image out of its top edge while the title slides to the bottom, both driven by one `grid-template-rows` transition (the `card-image-rows` / `card-image-rows-open` utilities in `globals.css`). Neither state changes how tall a card wants to be, so opening one never resizes its row. Set a card's `image` in `timeline.ts`; until one has it, the card shows a solid `limestone-300` placeholder. Plain cards have no image; they keep their centered title and deepen their fill to `limestone-200` on hover instead.
 
 `TimelineReveal` draws the line down as the visitor scrolls (its tip sits 80% down the viewport) and reveals each part as the line reaches it: a section's hatch, box outline, then label and icon; then its cards, dealt out left to right. It only decides when, by marking `[data-timeline-reveal]` elements `data-revealed`. Each part styles itself with the `timeline-pending:` (hide) and `timeline-revealed:` (play entrance) variants, and timings live in the `animate-timeline-*` tokens. To animate a new part, give it both variants and put it inside an existing reveal scope. Reduced motion, print, and no-JS get the static timeline. Keyboard focus shows its part at once, so a focused element is never hidden.
+
+### Site footer
+
+`SiteFooter` (`src/components/site-footer/`) renders on every page from `layout.tsx`, on `ink` with `limestone-50` text, inside `PageContainer` so it lines up with the header. `mt-auto` in the body's flex column pushes it to the viewport bottom on pages whose content doesn't fill the screen. It reuses `BrandLockup` (`src/components/brand/`, shared with the header) and `ExternalLinkList` (shared with the header's `ExternalLinks`, which adds the "Links" label). `CurrentYear` is the one client piece of the text column: the year in the exported HTML is whenever the site was last built, and it corrects it in the browser.
+
+`ShapeTiles` is the decoration. It measures its own width, fits a whole number of `72px`-ish columns across it (tiles stay square, never under `48px`, and stretch so the columns fill the width exactly), and gives every tile a random shape, quarter-turn and accent color — dealt with no repeats until all 10 are used, like the timeline's cards. Two timers then keep it moving: some tiles turn 90° clockwise, and a few pairs of neighbors trade cells. Rotation accumulates rather than wrapping, so turns are always clockwise. Tile counts, sizes and intervals are the constants at the top of `ShapeTiles.tsx`; the motion itself is the `tile-shuffle` utility in `globals.css`. Shapes are path data in `tileShapes.ts`, drawn in a 77×77 box and filled with `currentColor` — paste a new shape's path there to add one.
+
+The grid can't be rendered until it's measured, so the HTML holds an empty box of the right height and the tiles appear on the client; it's `aria-hidden` throughout, and reduced motion gets the grid standing still. Below `md` it stacks under the footer text.
 
 ### Maintainability
 

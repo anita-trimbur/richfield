@@ -3,11 +3,11 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
+import { BrandLockup } from "@/components/brand/BrandLockup";
 import { MenuIcon } from "@/components/icons/MenuIcon";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { cx } from "@/lib/cx";
 
-import { BrandLockup } from "./BrandLockup";
 import { ExternalLinks } from "./ExternalLinks";
 import { PrimaryNavList } from "./PrimaryNavList";
 import { useNavMode } from "./useNavMode";
@@ -81,7 +81,7 @@ export function SiteHeader() {
           className="relative grid grid-cols-[1fr_auto_1fr] items-center"
         >
           <div ref={leftRef} className="w-max">
-            <BrandLockup />
+            <BrandLockup subtitleClassName="text-limestone-700" />
           </div>
 
           <nav

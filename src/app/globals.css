@@ -31,7 +31,8 @@
   /*
    * Accent fills (bg-accent-*), assigned to timeline cards at random. These are
    * standalone colors, not a range. Ink text is at least 6.7:1 on each. Keep
-   * accentFills.ts in sync when adding or removing one.
+   * both class lists in src/lib/accents.ts in sync when adding or removing
+   * one.
    */
   --color-accent-sky: #a9c4ed;
   --color-accent-sage: #b7dcbe;
@@ -259,6 +260,21 @@
 }
 
 /*
+ * How a footer tile moves (see ShapeTiles). Snappy, but slow enough to follow
+ * one shape from cell to cell; a trade takes longer than a turn, so a tile
+ * doing both at once still reads as two moves. Reduced motion leaves the grid
+ * standing still, so only the transitions are conditional here — the tiles
+ * themselves stop because ShapeTiles never starts its timers.
+ */
+@utility tile-shuffle {
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      translate 420ms var(--ease-in-out),
+      rotate 300ms var(--ease-out);
+  }
+}
+
+/*
  * Icon defaults, set on the <svg> rendered by the Icon component. They live in
  * the base layer so any size-* or text-* class passed to an icon overrides
  * them, regardless of class order. Glyphs fill with currentColor, so text-*
@@ -278,8 +294,9 @@
   @apply text-4xl leading-none font-bold tracking-tight;
 }
 
+/* Color is left to the call site, so this works on ink as well as surface. */
 @utility type-subtitle {
-  @apply font-mono text-base leading-normal text-limestone-700 uppercase;
+  @apply font-mono text-base leading-normal uppercase;
 }
 
 @utility type-heading {

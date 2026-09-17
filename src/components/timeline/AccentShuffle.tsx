@@ -2,7 +2,9 @@
 
 import { useLayoutEffect, useRef, useSyncExternalStore } from "react";
 
-import { accentFills, shuffleAccentFills } from "./accentFills";
+import { accentFills } from "@/lib/accents";
+
+import { shuffleAccentFills } from "./shuffleAccentFills";
 
 type AccentShuffleProps = {
   /** Content holding the accent cards (see TimelineCard). */

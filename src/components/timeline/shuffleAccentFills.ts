@@ -1,21 +1,4 @@
 /**
- * Background classes for every accent color token in globals.css, written out
- * in full so Tailwind generates them. Keep in sync with those tokens.
- */
-export const accentFills = [
-  "bg-accent-sky",
-  "bg-accent-sage",
-  "bg-accent-mint",
-  "bg-accent-lavender",
-  "bg-accent-lime",
-  "bg-accent-lilac",
-  "bg-accent-ochre",
-  "bg-accent-butter",
-  "bg-accent-rose",
-  "bg-accent-peach",
-];
-
-/**
  * Gives every accent card (`[data-accent-card]`) inside `group` a random fill
  * from `fills`, replacing whichever fill it had. Fills don't repeat until all
  * of them are used, and then a newly shuffled round begins. Runs once per

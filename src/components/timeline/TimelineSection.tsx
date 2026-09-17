@@ -37,7 +37,7 @@ export function TimelineSection({
               </>
             )}
           </h2>
-          <p className="type-subtitle">{period}</p>
+          <p className="type-subtitle text-limestone-700">{period}</p>
         </div>
       </div>
 

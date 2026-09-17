@@ -1,7 +1,7 @@
 import type { TimelineSection as TimelineSectionData } from "@/content/timeline";
+import { accentFills } from "@/lib/accents";
 
 import { AccentShuffle } from "./AccentShuffle";
-import { accentFills } from "./accentFills";
 import { TimelineCard } from "./TimelineCard";
 import { TimelineReveal } from "./TimelineReveal";
 import { TimelineSection } from "./TimelineSection";
