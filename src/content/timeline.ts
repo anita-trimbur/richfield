@@ -14,6 +14,12 @@ export type TimelineCard = {
    * "plain": shorter, always limestone-100.
    */
   variant: "accent" | "plain";
+  /**
+   * Accent cards only: slides out of the card's top edge when the card is
+   * hovered or focused. Cards without one show a solid placeholder fill
+   * instead. Use `alt: ""` when the image only decorates the card title.
+   */
+  image?: { src: string; alt: string };
 };
 
 export type TimelineSection = {

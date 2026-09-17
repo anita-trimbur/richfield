@@ -65,6 +65,14 @@
       var(--spacing-timeline-hatch)
   );
 
+  /*
+   * Accent timeline cards: the image that slides out of a card's top edge on
+   * hover (see card-image-rows). The gap is the space kept between the
+   * image's bottom and the card's title.
+   */
+  --radius-card-image: 0.5rem; /* 8px */
+  --spacing-card-image-gap: 1.5rem; /* 24px */
+
   /* Layout widths (max-w-*) */
   --container-nav: 94.5rem; /* 1512px */
 
@@ -221,6 +229,33 @@
     transparent 0 calc(360deg - var(--timeline-box-sweep)),
     black 0
   );
+}
+
+/*
+ * An accent timeline card's hover reveal (plain cards have no image and just
+ * center their title). The card is a four-row grid: a spacer, the image, the
+ * title, then another spacer. At rest the image row is collapsed
+ * and the two spacers split the card's free space, so the title sits centered
+ * and the image is clipped away to nothing. Adding card-image-rows-open
+ * collapses the spacers and hands the image row all of that free space, so the
+ * image slides out of the card's top edge while the title slides down to the
+ * bottom. A single grid-template-rows transition drives both, so they always
+ * move together.
+ *
+ * Neither state changes how tall the card wants to be (see TimelineCard), so
+ * opening a card never shifts the ones around it. Browsers that don't
+ * interpolate grid-template-rows snap between the two states instead.
+ */
+@utility card-image-rows {
+  grid-template-rows: 1fr 0fr auto 1fr;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: grid-template-rows 300ms var(--ease-out);
+  }
+}
+
+@utility card-image-rows-open {
+  grid-template-rows: 0fr 1fr auto 0fr;
 }
 
 /*
