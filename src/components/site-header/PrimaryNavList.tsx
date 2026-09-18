@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
+import { type CSSProperties, useRef, useState } from "react";
 
 import { primaryNav } from "@/content/navigation";
 
@@ -11,6 +11,12 @@ import { useIconSlider } from "./useIconSlider";
 type PrimaryNavListProps = {
   /** Sets the layout (row or column) for where the list is used. */
   className?: string;
+  /** Given to every item, e.g. the mobile menu's staggered fade. */
+  itemClassName?: string;
+  /** Given to every link, e.g. the mobile menu's larger type and row height. */
+  linkClassName?: string;
+  /** Given to every link's icon, to size it with that type. */
+  iconClassName?: string;
 };
 
 // Treat "/work" and "/work/" as the same page.
@@ -18,7 +24,12 @@ function normalizePath(path: string) {
   return path.length > 1 ? path.replace(/\/$/, "") : path;
 }
 
-export function PrimaryNavList({ className }: PrimaryNavListProps) {
+export function PrimaryNavList({
+  className,
+  itemClassName,
+  linkClassName,
+  iconClassName,
+}: PrimaryNavListProps) {
   const pathname = usePathname();
   const currentIndex = primaryNav.findIndex(
     (item) => normalizePath(item.href) === normalizePath(pathname),
@@ -65,10 +76,18 @@ export function PrimaryNavList({ className }: PrimaryNavListProps) {
       }}
     >
       {primaryNav.map((item, index) => (
-        <li key={item.href}>
+        <li
+          key={item.href}
+          className={itemClassName}
+          // Its place in the list, so a caller can put the items in order
+          // (the mobile menu staggers their fade by it; see menu-row-shown).
+          style={{ "--nav-order": index } as CSSProperties}
+        >
           <NavLink
             {...item}
             isCurrent={index === currentIndex}
+            className={linkClassName}
+            iconClassName={iconClassName}
             iconRef={(el) => {
               iconRefs.current[index] = el;
             }}

@@ -2,12 +2,15 @@
 
 import { useLayoutEffect, useRef, useSyncExternalStore } from "react";
 
-import { accentFills } from "@/lib/accents";
-
-import { shuffleAccentFills } from "./shuffleAccentFills";
+import { shuffleAccentClasses } from "./shuffleAccentClasses";
 
 type AccentShuffleProps = {
-  /** Content holding the accent cards (see TimelineCard). */
+  /**
+   * The accent classes to deal out, from `@/lib/accents`: fills for the
+   * timeline's cards, text colors for the footer's brand lockup.
+   */
+  classes: string[];
+  /** Content holding the accent elements (marked `data-accent`). */
   children: React.ReactNode;
 };
 
@@ -16,11 +19,12 @@ type AccentShuffleProps = {
 const subscribe = () => () => {};
 
 /**
- * Gives the accent cards inside it random fills, so they differ on every page
- * load. The static HTML gives them fallback fills in palette order, which the
- * shuffle replaces before the first paint in both of these cases:
+ * Gives the `data-accent` elements inside it random accent classes, so they
+ * differ on every page load. The static HTML gives them fallback classes in
+ * palette order, which the shuffle replaces before the first paint in both of
+ * these cases:
  *
- * - Full page load: an inline script right after the cards shuffles them as
+ * - Full page load: an inline script right after the content shuffles it as
  *   the browser parses the HTML, well before React hydrates.
  * - Client-side navigation (e.g. the Home link): React never runs scripts it
  *   renders, so a layout effect shuffles instead, before the browser paints.
@@ -28,7 +32,7 @@ const subscribe = () => () => {};
  * The shuffle marks the wrapper when it runs, so the layout effect that also
  * runs after hydration leaves the script's colors alone.
  */
-export function AccentShuffle({ children }: AccentShuffleProps) {
+export function AccentShuffle({ classes, children }: AccentShuffleProps) {
   const groupRef = useRef<HTMLDivElement>(null);
 
   // True on the server and during hydration; false once hydrated and on
@@ -41,11 +45,11 @@ export function AccentShuffle({ children }: AccentShuffleProps) {
   );
 
   useLayoutEffect(() => {
-    if (groupRef.current) shuffleAccentFills(groupRef.current, accentFills);
-  }, []);
+    if (groupRef.current) shuffleAccentClasses(groupRef.current, classes);
+  }, [classes]);
 
   return (
-    // The shuffle adds an attribute here and changes card classes, which
+    // The shuffle adds an attribute here and changes classes below, which
     // React would otherwise report as hydration mismatches.
     <div ref={groupRef} suppressHydrationWarning>
       {children}
@@ -55,7 +59,7 @@ export function AccentShuffle({ children }: AccentShuffleProps) {
           // client bundles; the one in the HTML already ran, so that's fine.
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: `(${shuffleAccentFills})(document.currentScript.parentElement,${JSON.stringify(accentFills)})`,
+            __html: `(${shuffleAccentClasses})(document.currentScript.parentElement,${JSON.stringify(classes)})`,
           }}
         />
       )}

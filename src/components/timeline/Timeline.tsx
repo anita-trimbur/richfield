@@ -1,7 +1,7 @@
+import { AccentShuffle } from "@/components/accents/AccentShuffle";
 import type { TimelineSection as TimelineSectionData } from "@/content/timeline";
 import { accentFills } from "@/lib/accents";
 
-import { AccentShuffle } from "./AccentShuffle";
 import { TimelineCard } from "./TimelineCard";
 import { TimelineReveal } from "./TimelineReveal";
 import { TimelineSection } from "./TimelineSection";
@@ -37,7 +37,7 @@ export function Timeline({ sections }: TimelineProps) {
         />
       </div>
 
-      <AccentShuffle>
+      <AccentShuffle classes={accentFills}>
         <ol className="flex flex-col gap-20">
           {sections.map(({ cards, ...section }) => (
             <TimelineSection

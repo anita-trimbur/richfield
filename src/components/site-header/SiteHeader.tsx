@@ -4,11 +4,11 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { BrandLockup } from "@/components/brand/BrandLockup";
-import { MenuIcon } from "@/components/icons/MenuIcon";
 import { PageContainer } from "@/components/layout/PageContainer";
 import { cx } from "@/lib/cx";
 
 import { ExternalLinks } from "./ExternalLinks";
+import { MenuToggleIcon } from "./MenuToggleIcon";
 import { PrimaryNavList } from "./PrimaryNavList";
 import { useNavMode } from "./useNavMode";
 
@@ -107,27 +107,66 @@ export function SiteHeader() {
             aria-expanded={menuOpen}
             aria-controls={menuId}
             onClick={() => setMenuOpen((open) => !open)}
+            // The icon swap keys off this button's aria-expanded, so it has
+            // to be the group (see MenuToggleIcon).
             className={cx(
-              "col-start-3 row-start-1 -mr-2 justify-self-end p-2",
+              "group col-start-3 row-start-1 -mr-2 justify-self-end p-2",
               mobileOnly,
             )}
           >
-            <MenuIcon className="size-6" />
+            <MenuToggleIcon />
           </button>
         </div>
-
-        {/* Mobile menu panel. Full styling is still to come. */}
-        <div
-          id={menuId}
-          hidden={!menuOpen}
-          className="flex flex-col gap-6 pt-6"
-        >
-          <nav aria-label="Primary">
-            <PrimaryNavList className="flex flex-col gap-3" />
-          </nav>
-          <ExternalLinks />
-        </div>
       </PageContainer>
+
+      {/*
+        Mobile menu panel: a band of limestone-100 across the full width, with
+        its rows inside PageContainer so they line up with the brand lockup
+        above. The header's own bottom padding is the gap between the two. The
+        external links are left out at this size; the footer carries them.
+
+        It stays in the page at every width, collapsed to nothing when closed
+        (menu-panel-rows, which is what lets it slide instead of appear) and
+        marked inert so it takes no space, no focus and no announcement there.
+        aria-hidden says the same thing to the browsers whose inert support
+        stops at focus. Opening slides the band down and the rows fade in one
+        after another behind it (menu-row-shown, staggered by --nav-order).
+      */}
+      <div
+        id={menuId}
+        data-open={menuOpen || undefined}
+        inert={!menuOpen}
+        aria-hidden={!menuOpen}
+        className={cx(
+          "group grid menu-panel-closed overflow-hidden data-open:menu-panel-open",
+          mobileOnly,
+        )}
+      >
+        {/*
+          The collapsing grid item, and the band itself: the limestone surface
+          belongs here rather than on the panel, so that the panel's own
+          bottom padding reads as a gap above the page content.
+
+          min-h-0 lets the closed row squeeze this to nothing, and it must
+          carry no padding of its own: padding isn't something a 0fr row can
+          squeeze away, so it would leave a sliver of the band showing under
+          the header. The slim padding that keeps the first and last rows'
+          focus rings clear of the clipped edges goes inside it instead.
+          PageContainer has to stay an ordinary block here too — as a grid
+          item, its mx-auto would shrink it to its content and center that,
+          rather than filling the width.
+        */}
+        <nav aria-label="Primary" className="min-h-0 bg-limestone-100">
+          <PageContainer className="py-1">
+            <PrimaryNavList
+              className="flex flex-col divide-y divide-limestone-200"
+              itemClassName="menu-row-hidden group-data-open:menu-row-shown"
+              linkClassName="w-full py-5 text-2xl"
+              iconClassName="size-6"
+            />
+          </PageContainer>
+        </nav>
+      </div>
     </header>
   );
 }

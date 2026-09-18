@@ -1,11 +1,12 @@
 import { ExternalLinkList } from "@/components/links/ExternalLinkList";
 
+/**
+ * The header's external icon links. Each link carries its own accessible
+ * name (see IconLink), so the row needs no visible label.
+ */
 export function ExternalLinks() {
   return (
-    <div className="flex items-center gap-4">
-      <p className="type-subtitle text-limestone-700">Links</p>
-      {/* Matches the label color until hovered or focused. */}
-      <ExternalLinkList linkClassName="text-limestone-700 hover:text-ink focus-visible:text-ink" />
-    </div>
+    // Muted to match the rest of the header until hovered or focused.
+    <ExternalLinkList linkClassName="text-limestone-700 hover:text-ink focus-visible:text-ink" />
   );
 }

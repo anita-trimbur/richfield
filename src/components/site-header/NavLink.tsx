@@ -6,6 +6,10 @@ import { cx } from "@/lib/cx";
 
 type NavLinkProps = NavItem & {
   isCurrent: boolean;
+  /** Extra classes for the link, e.g. the mobile menu's larger type and rows. */
+  className?: string;
+  /** Sizes the icon, which is 18px by default; match the link's type size. */
+  iconClassName?: string;
   /** Receives the sliding icon element, which PrimaryNavList animates. */
   iconRef: Ref<HTMLSpanElement>;
   onPointerEnter: (event: PointerEvent<HTMLAnchorElement>) => void;
@@ -17,6 +21,8 @@ export function NavLink({
   href,
   icon: ItemIcon,
   isCurrent,
+  className,
+  iconClassName,
   iconRef,
   onPointerEnter,
   onFocus,
@@ -29,7 +35,10 @@ export function NavLink({
       onFocus={onFocus}
       // pr-icon-with-label mirrors the icon slot and gap on the right, so the
       // label is centered in its link.
-      className="inline-flex items-center gap-icon-label pr-icon-with-label aria-[current=page]:font-bold"
+      className={cx(
+        "inline-flex items-center gap-icon-label pr-icon-with-label aria-[current=page]:font-bold",
+        className,
+      )}
     >
       {/*
         The icon slot is always reserved, so the label never moves. The slot
@@ -41,7 +50,7 @@ export function NavLink({
           ref={iconRef}
           className={cx("block", !isCurrent && "-translate-x-full")}
         >
-          <ItemIcon />
+          <ItemIcon className={iconClassName} />
         </span>
       </span>
 

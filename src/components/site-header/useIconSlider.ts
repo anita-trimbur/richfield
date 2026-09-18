@@ -7,7 +7,7 @@ export type SlideSpeed = "in" | "out";
  * Milliseconds for an icon to travel one full slot width. Out is quicker, so
  * the icon snaps back when the pointer leaves.
  */
-const SLOT_CROSSING_MS: Record<SlideSpeed, number> = { in: 240, out: 140 };
+const SLOT_CROSSING_MS: Record<SlideSpeed, number> = { in: 160, out: 90 };
 
 /**
  * Slides nav icons as if one icon rides a slider behind the labels. Whenever

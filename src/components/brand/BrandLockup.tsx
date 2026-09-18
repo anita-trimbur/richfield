@@ -7,7 +7,8 @@ import { cx } from "@/lib/cx";
 type BrandLockupProps = {
   /**
    * Color for the role subtitle, which otherwise inherits. The header mutes
-   * it against the light surface; the footer lets it match its own text.
+   * it against the light surface; the footer holds it at the footer's own
+   * text color, since the mark and name above it are accent-colored.
    */
   subtitleClassName?: string;
 };
